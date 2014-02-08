@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/iconos">
+        <file>Iconos/icono-copiar.png</file>
+        <file>Iconos/icono-cortar.png</file>
+    </qresource>
+</RCC>

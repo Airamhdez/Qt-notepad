@@ -46,9 +46,11 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = Qt-notepad/main.cpp \
-		Qt-notepad/mainwindow.cpp moc_mainwindow.cpp
+		Qt-notepad/mainwindow.cpp qrc_Recursos.cpp \
+		moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		qrc_Recursos.o \
 		moc_mainwindow.o
 DIST          = /opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/spec_pre.prf \
 		/opt/Qt5.2.0/5.2.0/gcc/mkspecs/common/shell-unix.conf \
@@ -155,6 +157,7 @@ DIST          = /opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/spec_pre.prf \
 		/opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/yacc.prf \
 		/opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/lex.prf \
 		Qt-notepad/Qt-notepad/Qt-notepad.pro \
+		Qt-notepad/Qt-notepad/Recursos.qrc \
 		Qt-notepad/Qt-notepad.pro
 QMAKE_TARGET  = Qt-notepad-exe
 DESTDIR       = #avoid trailing-slash linebreak
@@ -294,6 +297,7 @@ Makefile: Qt-notepad/Qt-notepad.pro /opt/Qt5.2.0/5.2.0/gcc/mkspecs/linux-g++/qma
 		/opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/yacc.prf \
 		/opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/lex.prf \
 		Qt-notepad/Qt-notepad.pro \
+		Qt-notepad/Recursos.qrc \
 		/opt/Qt5.2.0/5.2.0/gcc/lib/libQt5Widgets.prl \
 		/opt/Qt5.2.0/5.2.0/gcc/lib/libQt5Gui.prl \
 		/opt/Qt5.2.0/5.2.0/gcc/lib/libQt5Core.prl
@@ -403,6 +407,7 @@ Makefile: Qt-notepad/Qt-notepad.pro /opt/Qt5.2.0/5.2.0/gcc/mkspecs/linux-g++/qma
 /opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/yacc.prf:
 /opt/Qt5.2.0/5.2.0/gcc/mkspecs/features/lex.prf:
 Qt-notepad/Qt-notepad.pro:
+Qt-notepad/Recursos.qrc:
 /opt/Qt5.2.0/5.2.0/gcc/lib/libQt5Widgets.prl:
 /opt/Qt5.2.0/5.2.0/gcc/lib/libQt5Gui.prl:
 /opt/Qt5.2.0/5.2.0/gcc/lib/libQt5Core.prl:
@@ -413,7 +418,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/Qt-notepad-exe1.0.0 || mkdir -p .tmp/Qt-notepad-exe1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/Qt-notepad-exe1.0.0/ && $(COPY_FILE) --parents Qt-notepad/mainwindow.h .tmp/Qt-notepad-exe1.0.0/ && $(COPY_FILE) --parents Qt-notepad/main.cpp Qt-notepad/mainwindow.cpp .tmp/Qt-notepad-exe1.0.0/ && (cd `dirname .tmp/Qt-notepad-exe1.0.0` && $(TAR) Qt-notepad-exe1.0.0.tar Qt-notepad-exe1.0.0 && $(COMPRESS) Qt-notepad-exe1.0.0.tar) && $(MOVE) `dirname .tmp/Qt-notepad-exe1.0.0`/Qt-notepad-exe1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Qt-notepad-exe1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/Qt-notepad-exe1.0.0/ && $(COPY_FILE) --parents Qt-notepad/Recursos.qrc .tmp/Qt-notepad-exe1.0.0/ && $(COPY_FILE) --parents Qt-notepad/mainwindow.h .tmp/Qt-notepad-exe1.0.0/ && $(COPY_FILE) --parents Qt-notepad/main.cpp Qt-notepad/mainwindow.cpp .tmp/Qt-notepad-exe1.0.0/ && (cd `dirname .tmp/Qt-notepad-exe1.0.0` && $(TAR) Qt-notepad-exe1.0.0.tar Qt-notepad-exe1.0.0 && $(COMPRESS) Qt-notepad-exe1.0.0.tar) && $(MOVE) `dirname .tmp/Qt-notepad-exe1.0.0`/Qt-notepad-exe1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Qt-notepad-exe1.0.0
 
 
 clean:compiler_clean 
@@ -434,8 +439,14 @@ mocables: compiler_moc_header_make_all compiler_moc_source_make_all
 
 check: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_Recursos.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_Recursos.cpp
+qrc_Recursos.cpp: Qt-notepad/Recursos.qrc \
+		Qt-notepad/Iconos/icono-cortar.png \
+		Qt-notepad/Iconos/icono-copiar.png
+	/opt/Qt5.2.0/5.2.0/gcc/bin/rcc -name Recursos Qt-notepad/Recursos.qrc -o qrc_Recursos.cpp
+
 compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
@@ -550,6 +561,42 @@ moc_mainwindow.cpp: /opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMainWindow \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtouchdevice.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabwidget.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qicon.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPlainTextEdit \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qplaintextedit.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtextedit.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextdocument.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextoption.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextcursor.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextformat.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpen.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qabstracttextdocumentlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qglyphrun.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qrawfont.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontdatabase.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMenu \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmenu.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qaction.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMenuBar \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmenubar.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QAction \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QFileDialog \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfiledialog.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdir.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfileinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdialog.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QFile \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QFontDialog \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfontdialog.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QClipboard \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qclipboard.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMessageBox \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmessagebox.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QToolBar \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtoolbar.h \
 		Qt-notepad/mainwindow.h
 	/opt/Qt5.2.0/5.2.0/gcc/bin/moc $(DEFINES) $(INCPATH) Qt-notepad/mainwindow.h -o moc_mainwindow.cpp
 
@@ -563,7 +610,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_header_clean 
 
 ####### Compile
 
@@ -679,6 +726,42 @@ main.o: Qt-notepad/main.cpp Qt-notepad/mainwindow.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtouchdevice.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabwidget.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qicon.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPlainTextEdit \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qplaintextedit.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtextedit.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextdocument.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextoption.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextcursor.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextformat.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpen.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qabstracttextdocumentlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qglyphrun.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qrawfont.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontdatabase.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMenu \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmenu.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qaction.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMenuBar \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmenubar.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QAction \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QFileDialog \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfiledialog.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdir.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfileinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdialog.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QFile \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QFontDialog \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfontdialog.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QClipboard \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qclipboard.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMessageBox \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmessagebox.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QToolBar \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtoolbar.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QApplication \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qapplication.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qcoreapplication.h \
@@ -799,8 +882,47 @@ mainwindow.o: Qt-notepad/mainwindow.cpp Qt-notepad/mainwindow.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qvector2d.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtouchdevice.h \
 		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtabwidget.h \
-		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qicon.h
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qicon.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QPlainTextEdit \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qplaintextedit.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtextedit.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qframe.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextdocument.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextoption.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextcursor.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextformat.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qpen.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qabstracttextdocumentlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qtextlayout.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qglyphrun.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qrawfont.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qfontdatabase.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMenu \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmenu.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qaction.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qactiongroup.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMenuBar \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmenubar.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QAction \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QFileDialog \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfiledialog.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qdir.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/qfileinfo.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qdialog.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtCore/QFile \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QFontDialog \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qfontdialog.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/QClipboard \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtGui/qclipboard.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QMessageBox \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qmessagebox.h \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/QToolBar \
+		/opt/Qt5.2.0/5.2.0/gcc/include/QtWidgets/qtoolbar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o Qt-notepad/mainwindow.cpp
+
+qrc_Recursos.o: qrc_Recursos.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_Recursos.o qrc_Recursos.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
